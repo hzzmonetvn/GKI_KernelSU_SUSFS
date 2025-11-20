@@ -139,8 +139,8 @@ jobs:
 
       - name: 配置 Git
         run: |
-          git config --global user.name "zzh20188"
-          git config --global user.email "BuildGkiKernel@gmail.com"
+          git config --global user.name "hzzmonetvn"
+          git config --global user.email "hzzmonet7@gmail.com"
       
       - name: 密钥设置——已经过mkppk修改
         env:
@@ -168,13 +168,13 @@ jobs:
           echo "Using branch for SUSFS: $SUSFS_BRANCH"
 
           # Clone repositories using the branch names
-          git clone https://github.com/WildPlusKernel/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
+          git clone https://github.com/hzzmonetvn/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
-          git clone https://github.com/WildPlusKernel/kernel_patches.git
+          git clone https://github.com/hzzmonetvn/kernel_patches.git
           # Sukisu的补丁仓库
           git clone https://github.com/ShirkNeko/SukiSU_patch.git
           # next修复补丁
-          git clone https://github.com/zzh20188/GKI_KernelSU_SUSFS.git zzh_patch
+          git clone https://github.com/hzzmonetvn/GKI_KernelSU_SUSFS.git zzh_patch
           
       - name: 设置 CONFIG 环境变量
         run: |
