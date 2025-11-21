@@ -323,11 +323,11 @@ jobs:
           echo "" >> $GITHUB_ENV
           echo "<details>" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
-          echo "<summary>提交信息</summary>" >> $GITHUB_ENV
+          echo "<summary>Note</summary>" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
-          echo "提交的哈希值与链接(以下提交指的是,本次编译时,KSU或SUSFS所在的进度):" >> $GITHUB_ENV
-          echo "- **KernelSU为${{ inputs.kernelsu_variant == 'Next' && 'KernelSU-' || '' }}${{ inputs.kernelsu_variant }}${{ inputs.kernelsu_branch == 'Dev(开发)' && format('({0})', needs.get_manager.outputs.ksuVer) || '稳定版' }}** (提交): [$KSU_REF]($KSU_URL)" >> $GITHUB_ENV
-          echo "- **SUSFS4KSU** (提交):" >> $GITHUB_ENV
+          echo "Commit hash and link when building::" >> $GITHUB_ENV
+          echo "- **KernelSU is ${{ inputs.kernelsu_variant == 'Next' && 'KernelSU-' || '' }}${{ inputs.kernelsu_variant }}${{ inputs.kernelsu_branch == 'Dev(开发)' && format('({0})', needs.get_manager.outputs.ksuVer) || 'Stable' }}** (Updated): [$KSU_REF]($KSU_URL)" >> $GITHUB_ENV
+          echo "- **SUSFS4KSU** (commits):" >> $GITHUB_ENV
           echo "  - gki-android12-5.10: [$COMMIT_HASH_gki_android12_5_10]($COMMIT_URL_gki_android12_5_10)" >> $GITHUB_ENV
           echo "  - gki-android13-5.10: [$COMMIT_HASH_gki_android13_5_10]($COMMIT_URL_gki_android13_5_10)" >> $GITHUB_ENV
           echo "  - gki-android13-5.15: [$COMMIT_HASH_gki_android13_5_15]($COMMIT_URL_gki_android13_5_15)" >> $GITHUB_ENV
@@ -337,7 +337,7 @@ jobs:
           echo "" >> $GITHUB_ENV
           echo "</details>" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
-          echo "点击下方 **【Assets】** 展开资源,底部还包含最新 **KSU管理器、CI构建SUSFS模块** " >> $GITHUB_ENV
+          echo "Click Assets for more" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           
       # Get the Latest Tag from GitHub
