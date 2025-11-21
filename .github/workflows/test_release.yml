@@ -162,21 +162,21 @@ jobs:
       REPO_NAME: GKI_KernelSU_SUSFS
       SUS_VERSION: ''
       GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-      RELEASE_NAME: "GKI内核: ${{ inputs.kernelsu_variant == 'Next' && 'KernelSU-' || '' }}${{ inputs.kernelsu_variant }}(${{ needs.get_manager.outputs.ksuVer }})  & SUSFS ${{ needs.get_manager.outputs.susVer }}"
+      RELEASE_NAME: "GKI Kernel: ${{ inputs.kernelsu_variant == 'Next' && 'KernelSU-' || '' }}${{ inputs.kernelsu_variant }}(${{ needs.get_manager.outputs.ksuVer }})  & SUSFS ${{ needs.get_manager.outputs.susVer }}"
       RELEASE_NOTES: |
-        此处包含：**${{ inputs.kernelsu_variant == 'Next' && 'KernelSU-' || '' }}${{ inputs.kernelsu_variant }}**、SUSFS ${{ needs.get_manager.outputs.susVer }} ${{ inputs.use_zram && '、LZ4KD' || '' }}
+        Includes：**${{ inputs.kernelsu_variant == 'Next' && 'KernelSU-' || '' }}${{ inputs.kernelsu_variant }}**、SUSFS ${{ needs.get_manager.outputs.susVer }} ${{ inputs.use_zram && '、LZ4KD' || '' }}
 
-        功能:
+        Function:
         -> ${{ inputs.kernelsu_variant == 'Next' && 'KernelSU-' || '' }}${{ inputs.kernelsu_variant }}${{ inputs.kernelsu_variant == 'Official' && '原版' || '' }}${{ inputs.kernelsu_branch == 'Dev(开发)' && format('({0})', needs.get_manager.outputs.ksuVer) || '稳定版' }}
         -> SUSFS ඞ ${{ needs.get_manager.outputs.susVer }}
         -> SUSFS Inline Hooks
-        ${{ inputs.kernelsu_variant != 'Official' && '-> Magic Mount 支持' || '-> OVERLAYFS 支持' }}
-        -> BBG安全补丁 ${{ inputs.use_bbg && '支持' || '不支持' }}
-        ${{ inputs.use_kpm && '-> KPM 支持' || '' }}
-        -> **LZ4KD&ONEPLUS_LZ4K**  ${{ inputs.use_zram && '开启' || '未开启' }}
-        -> lz4: v1.10.0 ${{ inputs.use_zram && '开启' || '未开启' }}
+        ${{ inputs.kernelsu_variant != 'Official' && '-> Magic Mount' || '-> OVERLAYFS' }}
+        -> BBG ${{ inputs.use_bbg && 'Support' || 'No support' }}
+        ${{ inputs.use_kpm && '-> KPM Support' || '' }}
+        -> **LZ4KD&ONEPLUS_LZ4K**  ${{ inputs.use_zram && 'On' || 'Off' }}
+        -> lz4: v1.10.0 ${{ inputs.use_zram && '开启' || 'Actived' }}
         
-        模块: 
+        SuSFS module: 
         -> https://github.com/sidex15/ksu_module_susfs
         
     steps:
@@ -286,28 +286,28 @@ jobs:
             echo "This is the Official variant"
             echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
             echo "$RELEASE_NOTES" >> $GITHUB_ENV
-            echo "Official 管理器:" >> $GITHUB_ENV
+            echo "Official Manager:" >> $GITHUB_ENV
             echo "-> https://github.com/tiann/KernelSU" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
           elif [ "${{ inputs.kernelsu_variant }}" == "Next" ]; then
             echo "This is the Next variant"
             echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
             echo "$RELEASE_NOTES" >> $GITHUB_ENV
-            echo "Next 管理器:" >> $GITHUB_ENV
+            echo "Next Manager:" >> $GITHUB_ENV
             echo "-> https://github.com/KernelSU-Next/KernelSU-Next" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
           elif [ "${{ inputs.kernelsu_variant }}" == "MKSU" ]; then
             echo "This is the MKSU variant"
             echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
             echo "$RELEASE_NOTES" >> $GITHUB_ENV
-            echo "MKSU 管理器:" >> $GITHUB_ENV
+            echo "MKSU Manager:" >> $GITHUB_ENV
             echo "-> https://github.com/5ec1cff/KernelSU" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
           elif [ "${{ inputs.kernelsu_variant }}" == "SukiSU" ]; then
             echo "This is the SukiSU variant"
             echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
             echo "$RELEASE_NOTES" >> $GITHUB_ENV
-            echo "SukiSU 管理器:" >> $GITHUB_ENV
+            echo "SukiSU Manager:" >> $GITHUB_ENV
             echo "-> https://github.com/SukiSU-Ultra/SukiSU-Ultra" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
           else
