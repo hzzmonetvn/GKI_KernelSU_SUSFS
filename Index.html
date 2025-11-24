@@ -91,7 +91,7 @@
             const inputs = Object.fromEntries(formData.entries());
             const workflowId = workflowSelect.value;
 
-            const response = await fetch(`https://api.github.com/repos/OWNER/REPO/actions/workflows/${workflowId}/dispatches`, {
+            const response = await fetch(`https://api.github.com/repos/hzzmonetvn/GKI_KernelSU_SUSFS/actions/workflows/${workflowId}/dispatches`, {
                 method: 'POST',
                 headers: { 'Authorization': `token ${inputs.token}`, 'Accept': 'application/vnd.github.v3+json' },
                 body: JSON.stringify({ ref: 'main', inputs: { ...inputs, token: undefined } }) // Exclude token
