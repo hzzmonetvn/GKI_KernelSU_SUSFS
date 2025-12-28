@@ -166,8 +166,8 @@ jobs:
 
       - name: 配置 Git
         run: |
-          git config --global user.name "zzh20188"
-          git config --global user.email "BuildGkiKernel@gmail.com"
+          git config --global user.name "hzzmonetvn"
+          git config --global user.email "hzzmonet7@gmail.com"
       
       - name: 密钥设置——已经过mkppk修改
         env:
@@ -195,7 +195,7 @@ jobs:
           echo "SUSFS 选用分支: $SUSFS_BRANCH"
 
           # Clone repositories using the branch names
-          git clone https://github.com/WildPlusKernel/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
+          git clone https://github.com/hzzmonetvn/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
 
           if [ "${{ inputs.kernelsu_variant }}" == "SukiSU" ]; then
             git clone https://github.com/ShirkNeko/susfs4ksu.git -b "$SUSFS_BRANCH"
