@@ -405,32 +405,34 @@ jobs:
           branch_input="${{ inputs.ksu_branch }}"
           variant_input="${{ inputs.ksu_variant }}"
 
-          case "$branch_input" in
-            "Stable(标准)")
-              case "$variant_input" in
-                "Next") BRANCH="-s stable" ;;
-                "SukiSU"|"ReSukiSU") BRANCH="-s builtin" ;;
-                "Official"|"MKSU") BRANCH="-s main" ;;
-                *) BRANCH="-" ;;
-              esac
-              ;;
-            "Dev(开发)")
-              case "$variant_input" in
-                "Official"|"MKSU") BRANCH="-s main" ;;
-                "Next") BRANCH="-s dev" ;;
-                "SukiSU"|"ReSukiSU") BRANCH="-s builtin" ;;
-                *) echo "未知变体: $variant_input" >&2; exit 1 ;;
-              esac
-              ;;
-            *)
-              echo "未知分支: $branch_input" >&2
-              exit 1
-              ;;
-          esac
+          if [ "$variant_input" = "ReSukiSU" ]; then
+            BRANCH="-s main"
+          else
+            case "$branch_input" in
+              "Stable(标准)")
+                case "$variant_input" in
+                  "Next") BRANCH="-s stable" ;;
+                  "SukiSU") BRANCH="-s builtin" ;;
+                  "Official"|"MKSU") BRANCH="-s main" ;;
+                  *) BRANCH="-" ;;
+                esac
+                ;;
+              "Dev(开发)")
+                case "$variant_input" in
+                  "Official"|"MKSU") BRANCH="-s main" ;;
+                  "Next") BRANCH="-s dev" ;;
+                  "SukiSU") BRANCH="-s builtin" ;;
+                  *) echo "未知变体: $variant_input" >&2; exit 1 ;;
+                esac
+                ;;
+              *)
+                echo "未知分支: $branch_input" >&2
+                exit 1
+                ;;
+            esac
 
-          # SukiSU/ReSukiSU 不启用 SUSFS 时强制使用 main 分支
-          if [ "$variant_input" = "SukiSU" ] || [ "$variant_input" = "ReSukiSU" ]; then
-            if [ "${{ inputs.enable_susfs }}" = "false" ]; then
+            # SukiSU 不启用 SUSFS 时强制使用 main 分支
+            if [ "$variant_input" = "SukiSU" ] && [ "${{ inputs.enable_susfs }}" = "false" ]; then
               BRANCH="-s main"
             fi
           fi
@@ -515,12 +517,59 @@ jobs:
             echo "KSU_LATEST_COMMIT_DATE=未知" >> $GITHUB_ENV
           fi
 
-      # ==================== 配置 SukiSU 管理器信息 ====================
+      # ==================== 定制 SukiSU 版本标识 ====================
       - name: 配置 SukiSU 管理器信息
-        if: inputs.ksu_variant == 'SukiSU' && vars.MANAGER_STR != ''
+        if: inputs.ksu_variant == 'SukiSU'
         working-directory: ${{ env.KERNEL_ROOT }}/KernelSU
         run: |
-          sed -i 's/\(v\$1-\).*\(@\$\)/\1${{ vars.MANAGER_STR }}\2/' ./kernel/Makefile
+          KBUILD_FILE="./kernel/Kbuild"
+          CUSTOM_TAG="${{ vars.MANAGER_STR }}"
+
+          if [ ! -f "$KBUILD_FILE" ]; then
+            echo "未找到 $KBUILD_FILE，跳过 SukiSU 版本标识定制"
+            exit 0
+          fi
+
+          GIT_HASH=$(git rev-parse --short=8 HEAD)
+          BRANCH_NAME="${BRANCH#-s }"
+          if [ -z "$BRANCH_NAME" ] || [ "$BRANCH_NAME" = "$BRANCH" ]; then
+            BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+          fi
+
+          if [ -n "$CUSTOM_TAG" ]; then
+            VERSION_TEMPLATE="v\$1-$CUSTOM_TAG@$BRANCH_NAME[$GIT_HASH]"
+          else
+            VERSION_TEMPLATE="v\$1-$GIT_HASH@$BRANCH_NAME"
+          fi
+
+          awk -v body="$VERSION_TEMPLATE" '
+            BEGIN {
+              in_block = 0
+              replaced = 0
+            }
+            /^[[:space:]]*define get_ksu_version_full$/ {
+              print
+              print body
+              in_block = 1
+              replaced = 1
+              next
+            }
+            in_block && /^[[:space:]]*endef$/ {
+              print
+              in_block = 0
+              next
+            }
+            !in_block {
+              print
+            }
+            END {
+              if (!replaced) {
+                exit 1
+              }
+            }
+          ' "$KBUILD_FILE" > "${KBUILD_FILE}.tmp" && mv "${KBUILD_FILE}.tmp" "$KBUILD_FILE"
+
+          echo "已更新 get_ksu_version_full 模板: $VERSION_TEMPLATE"
 
       # ==================== 应用 SUSFS 补丁 ====================
       # SUSFS (Super User SUS FileSystem) 用于隐藏 root 痕迹
