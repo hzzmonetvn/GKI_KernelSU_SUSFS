@@ -505,7 +505,7 @@ jobs:
               ;;
             "ReSukiSU")
               echo "添加 ReSukiSU..."
-              curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash $BRANCH
+              curl -LSs "https://raw.githubusercontent.com/hzzmonetvn/HzzMonet/main/kernel/setup.sh" | bash -s main
               ;;
           esac
 
@@ -537,9 +537,9 @@ jobs:
           fi
 
           if [ -n "$CUSTOM_TAG" ]; then
-            VERSION_TEMPLATE="v\$1-$CUSTOM_TAG@$BRANCH_NAME[$GIT_HASH]"
+            VERSION_TEMPLATE="v\$1-$CUSTOM_TAG@HzzMonet[$GIT_HASH]"
           else
-            VERSION_TEMPLATE="v\$1-$GIT_HASH@$BRANCH_NAME"
+            VERSION_TEMPLATE="v\$1-$GIT_HASH@HzzMonet"
           fi
 
           awk -v body="$VERSION_TEMPLATE" '
