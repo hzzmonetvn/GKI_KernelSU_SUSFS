@@ -30,7 +30,7 @@ jobs:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
       CCACHE_HARDLINK: "true"
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
     steps:
       - name: 🧐 Debug Workflow Caller Context
@@ -161,18 +161,18 @@ jobs:
 
             # 对于 Next 变体，添加 branch 参数过滤
             if [ "${{ inputs.kernelsu_variant }}" == "Next" ]; then
-              BUILD_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              BUILD_ID=$(curl -s -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" \
                 "https://api.github.com/repos/$REPO/actions/workflows/$FILENAME/runs?branch=$BRANCH&status=success&per_page=1" |
                 jq -r '.workflow_runs[0].id')
             else
-              BUILD_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              BUILD_ID=$(curl -s -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" \
                 "https://api.github.com/repos/$REPO/actions/workflows/$FILENAME/runs?status=success" |
                 jq -r '.workflow_runs['"$NUMBER"'].id')
             fi
 
             echo "找到构建 ID: $BUILD_ID"
 
-            ARTIFACTS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            ARTIFACTS=$(curl -s -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" \
               "https://api.github.com/repos/$REPO/actions/runs/$BUILD_ID/artifacts")
 
             # 对于 Next 变体使用精确匹配，其他变体使用模糊匹配
@@ -208,7 +208,7 @@ jobs:
             SAFE_NAME=$(echo "$NAME" | tr '/ ' '__')
             ZIP_NAME="${{ inputs.kernelsu_variant }}-${SAFE_NAME}(${{ env.KSU_VERSION }}).zip"
             echo "下载 $NAME -> $ZIP_NAME"
-            curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o "$ZIP_NAME" "$URL"
+            curl -L -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" -o "$ZIP_NAME" "$URL"
             mkdir -p "manager-artifacts/$SAFE_NAME"
             unzip -o "$ZIP_NAME" -d "manager-artifacts/$SAFE_NAME"
             rm -rf "$ZIP_NAME"
@@ -218,11 +218,11 @@ jobs:
         id: add_SUSFS
         continue-on-error: true
         run: |
-          BUILD_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          BUILD_ID=$(curl -s -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" \
           "https://api.github.com/repos/sidex15/susfs4ksu-module/actions/workflows/build.yml/runs?status=success" |
           jq -r '.workflow_runs[0].id')
 
-          ARTIFACTS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          ARTIFACTS=$(curl -s -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" \
           "https://api.github.com/repos/sidex15/susfs4ksu-module/actions/runs/$BUILD_ID/artifacts")
 
           DOWNLOAD_URL=$(echo "$ARTIFACTS" | jq -r '.artifacts[0].archive_download_url') 
@@ -234,7 +234,7 @@ jobs:
           echo $DOWNLOAD_URL
           echo $NAME
           # 下载 Manager 文件
-          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -o "$NAME" "$DOWNLOAD_URL"
+          curl -L -H "Authorization: token ${{ secrets.MY_GITHUB_TOKEN }}" -o "$NAME" "$DOWNLOAD_URL"
           echo "$NAME 文件已下载.zip"
           
           

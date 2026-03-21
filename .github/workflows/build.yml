@@ -225,8 +225,8 @@ jobs:
       # ==================== 配置 Git ====================
       - name: 配置 Git
         run: |
-          git config --global user.name "BuildBot"
-          git config --global user.email "BuildGkiKernel@gmail.com"
+          git config --global user.name "hzzmonetvn"
+          git config --global user.email "hzzmonet7@gmail.com"
 
       # ==================== 克隆依赖仓库 ====================
       # 克隆 AnyKernel3、SUSFS、各种补丁仓库
@@ -508,7 +508,7 @@ jobs:
               ;;
             "ReSukiSU")
               echo "添加 ReSukiSU..."
-              curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash $BRANCH
+              curl -LSs "https://raw.githubusercontent.com/hzzmonetvn/ReSukiSU/main/kernel/setup.sh" | bash $BRANCH
               ;;
           esac
 

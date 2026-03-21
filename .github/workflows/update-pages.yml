@@ -58,7 +58,7 @@ jobs:
           fi
 
   deploy-pages:
-    if: ${{ github.repository == 'zzh20188/GKI_KernelSU_SUSFS' }}
+    if: ${{ github.repository == 'hzzmonetvn/GKI_KernelSU_SUSFS' }}
     needs: update-data
     runs-on: ubuntu-latest
     environment:
