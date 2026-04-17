@@ -30,12 +30,12 @@ on:
           - MKSU
         default: ReSukiSU
       kernelsu_branch:
-        description: "KSU Branch"
+        description: "KSU Branch (Stable or Dev)"
         type: choice
         options:
-          - Stable(Standard)
-          - Dev(Development)
-        default: Stable(Standard)
+          - "Stable(标准)"
+          - "Dev(开发)"
+        default: "Stable(标准)"
 
       version:
         description: "Custom Version Name (Optional)"
