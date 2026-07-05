@@ -462,7 +462,8 @@ jobs:
               ;;
             "ReSukiSU")
               echo "添加 ReSukiSU..."
-              curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash $BRANCH
+              curl -LSs "https://raw.githubusercontent.com/hzzmonetvn/ReSukiSU/main/kernel/setup.sh" | bash $BRANCH
+              find . -name "Kbuild" -exec sed -i -E 's/REPO_NAME\s*.*/REPO_NAME:=HzzMonet/g' {} +
               ;;
             *)
               if [ -z "$LEGACY_SUKISU_CONFIG" ]; then
